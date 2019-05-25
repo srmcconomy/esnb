@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+    <style>
+      @font-face {
+        font-family: HyliaSerif;
+        src: url(<%= font %>) format("opentype");
+      }
+      body {
+        font-family: Open Sans;
+        background: #121212;
+        color: rgba(255, 255, 255, 0.87);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        overflow-x: hidden;
+        font-size: 1vw;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      @media (orientation: landscape) {
+        body {
+          font-size: 5px;
+        }
+      }
+      .container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        height: 100%;
+        width: 80%;
+      }
+      @media (orientation: portrait) {
+        .container {
+          flex-direction: column;
+        }
+      }
+      .leaderboard {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10em;
+        justify-content: center;
+        align-items: center;
+      }
+      @media (orientation: landscape) {
+        .leaderboard {
+          flex: 1;
+        }
+      }
+      .results {
+        width: 100vw;
+      }
+      .result {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 1em 0;
+        font-size: 3.2em;
+        width: 100%;
+      }
+
+      .flag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 10%;
+      }
+      .flag img {
+        height: 1em;
+        filter: saturate(0.2);
+      }
+
+      .name {
+        color: rgba(255, 255, 255, 0.60);
+        width: 35%;
+        font-weight: 600;
+      }
+
+      .place {
+        color: rgba(255, 255, 255, 0.38);
+        width: 5%;
+      }
+      .score {
+        color: rgba(255, 255, 255, 0.87);
+        width: 30%;
+        text-align: right;
+      }
+      @media (orientation: landscape) {
+        .results {
+          width: 100em;
+        }
+        .result {
+          padding: 0.5em 0;
+        }
+      }
+      .logo {
+        color: rgba(255, 255, 255, 0.87);
+        margin-top: 8em;
+        margin-bottom: 3em;
+      }
+      @media (orientation: landscape) {
+        .logo {
+          position: fixed;
+          top: calc(50vh - 30em);
+        }
+      }
+      .logo .main {
+        font-size: 28em;
+        font-family: HyliaSerif;
+      }
+      .logo .secondary {
+        font-size: 4em;
+      }
+      .filler {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      @media (orientation: landscape) {
+        .filler {
+          flex: 1;
+        }
+      }
+      .time {
+        margin-top: 2em;
+        text-align: center;
+        font-size: 3.2em;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.38);
+      }
+      .season {
+        margin-top: 3em;
+        font-size: 4em;
+        text-align: center;
+      }
+      .dates {
+        font-size: 3.2em;
+        text-align: center;
+        margin-bottom: 2em;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.38);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="filler">
+        <div class="logo">
+          <div class="main">ESNB</div>
+          <div class="secondary">European Saturday Night Bingo League</div>
+          <div class="time">Every Saturday night at 10pm in central Europe<br>That's <span id="yourtime"></span> your time</div>
+        </div>
+      </div>
+
+      <div class="leaderboard">
+        <div class="season">Season 1</div>
+        <div class="dates">May 18 – August 3</div>
+        <div class="results">
+          <% results.forEach((result, i) => { %>
+          <div class="result">
+            <div class="place"><%= i + 1 %></div>
+            <div class="flag">
+              <% console.log(`./${result.country}.svg`) %>
+              <% if (validFlags.has(`./${result.country}.svg`)) { %>
+                <img src="assets/flags/<%= result.country %>.svg">
+              <% } %>
+            </div>
+            <div class="name"><a href="https://twitch.tv/<%= result.twitch %>"><%= result.name %></a></div>
+            <div class="score"><%= result.score %></div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+    <script>
+      const today = new Date();
+      today.setHours(12, 0, 0, 0);
+      const midnightUTC = new Date(today.valueOf() + (6 - today.getDay()) * 1000 * 60 * 60 * 24);
+      midnightUTC.setUTCHours(0, 0, 0, 0);
+      const parisOffset = -/(\d\d?):00:00/.exec(midnightUTC.toLocaleTimeString('en-US', { timeZone: 'Europe/Paris' }))[1];
+      const raceDate = new Date();
+      raceDate.setUTCHours(22 + parisOffset, 0, 0, 0);
+      const groups = /(\d\d?):00:00 ([AP]M)/.exec(raceDate.toLocaleTimeString('en-US'));
+
+      document.getElementById('yourtime').innerText = `${groups[1]}${groups[2].toLowerCase()}${raceDate.getDay() === 0 ? ' Sunday' : ''}`;
+    </script>
+  </body>
+</html>
