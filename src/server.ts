@@ -27,4 +27,4 @@ router.get('/', async context => {
 app.use(router.routes());
 app.use(mount('/assets', serve(__dirname + '/assets')));
 
-app.listen(8000);
+app.listen(process.env.PORT || 8000);

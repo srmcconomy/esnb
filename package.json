@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "watch": "node scripts watch",
-    "build": "node scripts build",
-    "start": "TZ=Europe/Paris nodemon dist/main.js"
+    "build": "production=true node scripts build",
+    "start": "TZ=Europe/Paris nodemon dist/main.js",
+    "start-prod": "PORT=80 TZ=Europe/Paris nodemon dist/main.js"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
