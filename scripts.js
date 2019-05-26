@@ -9,7 +9,7 @@ function watch() {
 }
 
 function build() {
-  webpack(require('./webpack.config'));
+  webpack(require('./webpack.config')).run();
 }
 
 switch (process.argv[2]) {

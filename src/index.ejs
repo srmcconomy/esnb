@@ -146,6 +146,7 @@
         color: rgba(255, 255, 255, 0.38);
       }
     </style>
+    <title>ESNB League</title>
   </head>
   <body>
     <div class="container">
@@ -183,8 +184,7 @@
       const midnightUTC = new Date(today.valueOf() + (6 - today.getDay()) * 1000 * 60 * 60 * 24);
       midnightUTC.setUTCHours(0, 0, 0, 0);
       const parisOffset = -/(\d\d?):00:00/.exec(midnightUTC.toLocaleTimeString('en-US', { timeZone: 'Europe/Paris' }))[1];
-      const raceDate = new Date();
-      raceDate.setUTCHours(22 + parisOffset, 0, 0, 0);
+      const raceDate = new Date(midnightUTC.valueOf() + (22 + parisOffset) * 1000 * 60 * 60);
       const groups = /(\d\d?):00:00 ([AP]M)/.exec(raceDate.toLocaleTimeString('en-US'));
 
       document.getElementById('yourtime').innerText = `${groups[1]}${groups[2].toLowerCase()}${raceDate.getDay() === 0 ? ' Sunday' : ''}`;
